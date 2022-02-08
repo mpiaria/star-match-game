@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import "../styles/StarMatch.css";
-import { Color, random, range, sum } from "../utils/common";
+import "../styles/StarGame.css";
+import { NumberStatus, random, randomSumIn, range, sum } from "../utils/common";
 import NumberButton from "./NumberButton";
 import StarDisplay from "./StarDisplay";
 
@@ -9,16 +9,32 @@ const StarGame: React.FC = (): JSX.Element => {
 	const [candidateNumbers, setCandidateNumbers] = useState(new Array<number>());
 	const [numberOfStars, setNumberOfStars] = useState(random(1, 9));
 
-	const candidatesAreWrong = (candidates: Array<number>): boolean => sum(candidates) > numberOfStars;
+	const availableMinusCandidates = (candidates: number[]): number[] => availableNumbers.filter((availableNumber) => !candidates?.includes(availableNumber));
 
-	const numberStatus = (num: number): Color => {
-		let status: Color;
+	const candidatesAreWrong = (): boolean => sum(candidateNumbers) > numberOfStars;
+
+	const handleNumberClick = (num: number, currentStatus: NumberStatus): void => {
+		if (currentStatus !== NumberStatus.Used) {
+			const newCandidateNumbers = candidateNumbers.concat(num);
+			if (sum(newCandidateNumbers) === numberOfStars) {
+				const newAvailableNums = availableMinusCandidates(newCandidateNumbers);
+				setAvailableNumbers(newAvailableNums);
+				setCandidateNumbers([]);
+				setNumberOfStars(randomSumIn(newAvailableNums, 9));
+			} else {
+				setCandidateNumbers(newCandidateNumbers);
+			}
+		}
+	};
+
+	const calculateNumberStatus = (num: number): NumberStatus => {
+		let status: NumberStatus;
 		if (!availableNumbers?.includes(num)) {
-			status = Color.Used;
+			status = NumberStatus.Used;
 		} else if (candidateNumbers?.includes(num)) {
-			status = candidatesAreWrong(candidateNumbers) ? Color.Wrong : Color.Candidate;
+			status = candidatesAreWrong() ? NumberStatus.Wrong : NumberStatus.Candidate;
 		} else {
-			status = Color.Available;
+			status = NumberStatus.Available;
 		}
 		return status;
 	};
@@ -33,7 +49,7 @@ const StarGame: React.FC = (): JSX.Element => {
 				<div className="right">
 					{range(1, 9).map(
 						(num: number): JSX.Element => (
-							<NumberButton key={num} num={num} status={numberStatus(num)} />
+							<NumberButton handleClick={handleNumberClick} key={num} num={num} status={calculateNumberStatus(num)} />
 						),
 					)}
 				</div>
