@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
-import "../styles/StarGame.css";
+import "../styles/StarMatch.css";
 import { GameStatus, NumberStatus, random, randomSumIn, range, sum } from "../utils/common";
 import NumberButton from "./NumberButton";
 import PlayAgain from "./PlayAgain";
 import StarDisplay from "./StarDisplay";
+
+type StarMatchProps = {
+	startNewGame: () => void;
+};
 
 /**
  * The parent component for the entire Star Game.
  *
  * @returns parent JSX.Element
  */
-const StarGame: React.FC = (): JSX.Element => {
+const StarMatch: React.FC<StarMatchProps> = ({ startNewGame }: StarMatchProps): JSX.Element => {
 	/** State variable representing the numbers available to be chosen */
 	const [availableNumbers, setAvailableNumbers] = useState(range(1, 9));
 
@@ -93,7 +97,7 @@ const StarGame: React.FC = (): JSX.Element => {
 	 * @param num - the number value of the NumberButton being clicked
 	 * @param currentStatus - the status of that number
 	 */
-	const handleNumberClick = (num: number, currentStatus: NumberStatus): void => {
+	const updateStateOfNumbers = (num: number, currentStatus: NumberStatus): void => {
 		if (currentStatus === NumberStatus.Used || Number.isNaN(num) || calculateGameStatus() !== GameStatus.InProgress) {
 			return;
 		}
@@ -109,16 +113,6 @@ const StarGame: React.FC = (): JSX.Element => {
 		}
 	};
 
-	/**
-	 * Resets the state when the PlayAgain button is clicked.
-	 */
-	const handlePlayAgainClick = (): void => {
-		setAvailableNumbers(range(1, 9));
-		setCandidateNumbers([]);
-		setNumberOfStars(random(1, 9));
-		setSecondsRemaining(10);
-	};
-
 	return (
 		<div className="game">
 			<div className="help">Pick 1 or more numbers that sum to the number of stars</div>
@@ -127,13 +121,13 @@ const StarGame: React.FC = (): JSX.Element => {
 					{calculateGameStatus() === GameStatus.InProgress ? (
 						<StarDisplay numberOfStars={numberOfStars} />
 					) : (
-						<PlayAgain gameStatus={calculateGameStatus()} handleClick={handlePlayAgainClick} />
+						<PlayAgain gameStatus={calculateGameStatus()} handleClick={startNewGame} />
 					)}
 				</div>
 				<div className="right">
 					{range(1, 9).map(
 						(num: number): JSX.Element => (
-							<NumberButton handleClick={handleNumberClick} key={num} num={num} status={calculateNumberStatus(num)} />
+							<NumberButton handleClick={updateStateOfNumbers} key={num} num={num} status={calculateNumberStatus(num)} />
 						),
 					)}
 				</div>
@@ -143,4 +137,4 @@ const StarGame: React.FC = (): JSX.Element => {
 	);
 };
 
-export default StarGame;
+export default StarMatch;
