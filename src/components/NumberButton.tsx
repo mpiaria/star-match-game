@@ -1,13 +1,14 @@
 import React from "react";
-import { Color } from "../utils/common";
+import { NumberStatus } from "../utils/common";
 
 type NumberButtonProps = {
+	handleClick: (num: number, currentStatus: NumberStatus) => void;
 	num: number;
-	status: Color;
+	status: NumberStatus;
 };
 
-const NumberButton: React.FC<NumberButtonProps> = ({ num, status }: NumberButtonProps): JSX.Element => (
-	<button className="number" onClick={(event: React.MouseEvent<HTMLButtonElement>): void => console.log("event:", event)} style={{ backgroundColor: status }}>
+const NumberButton: React.FC<NumberButtonProps> = ({ handleClick, num, status }: NumberButtonProps): JSX.Element => (
+	<button className="number" onClick={(_event: React.MouseEvent<HTMLButtonElement>): void => handleClick(num, status)} style={{ backgroundColor: status }}>
 		{num}
 	</button>
 );
