@@ -1,15 +1,39 @@
-export const enum GameStatus {
-	InProgress,
-	Lost,
-	Won,
-}
+import { GameStatus, NumberStatus } from "../types/enums";
 
-export const enum NumberStatus {
-	Available = "lightgray",
-	Used = "lightgreen",
-	Wrong = "lightcoral",
-	Candidate = "deepskyblue",
-}
+/**
+ * The game is finished when there are no available numbers or the timer has expired.
+ *
+ * @returns GameStatus.Won if there are no available numbers left.  GameStatus.Lost if the timer has expired.  GameStatus.InProgress otherwise.
+ */
+export const gameStatus = (availableNumbers: number[], secondsRemaining: number): GameStatus => {
+	let status: GameStatus;
+	if (!availableNumbers || availableNumbers.length === 0) {
+		status = GameStatus.Won;
+	} else if (Number.isNaN(secondsRemaining) || secondsRemaining === 0) {
+		status = GameStatus.Lost;
+	} else {
+		status = GameStatus.InProgress;
+	}
+	return status;
+};
+
+/**
+ * Determines the new NumberStatus for the given num.
+ *
+ * @param num - the number to be evaluated
+ * @returns a NumberStatus based on the state variables and the value of num
+ */
+export const numberStatus = (availableNumbers: number[], candidateNumbers: number[], numberOfStars: number, num: number): NumberStatus => {
+	let status: NumberStatus;
+	if (!availableNumbers || !availableNumbers.includes(num)) {
+		status = NumberStatus.Used;
+	} else if (candidateNumbers && candidateNumbers.includes(num)) {
+		status = sum(candidateNumbers) <= numberOfStars ? NumberStatus.Candidate : NumberStatus.Wrong;
+	} else {
+		status = NumberStatus.Available;
+	}
+	return status;
+};
 
 /**
  * Pick a random number between min and max with the edges included.

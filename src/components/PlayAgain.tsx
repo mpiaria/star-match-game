@@ -1,5 +1,5 @@
 import React from "react";
-import { GameStatus } from "../utils/common";
+import { GameStatus } from "../types/enums";
 
 type PlayAgainProps = {
 	gameStatus: GameStatus;
