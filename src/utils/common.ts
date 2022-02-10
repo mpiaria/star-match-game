@@ -21,7 +21,13 @@ export const gameStatus = (availableNumbers: number[], secondsRemaining: number)
  * Determines the new NumberStatus for the given num.
  *
  * @param num - the number to be evaluated
- * @returns a NumberStatus based on the state variables and the value of num
+ * @returns
+ * <ul>
+ *   <li>Used: if not in availableNumbers</li>
+ *   <li>Candidate: if included in candidateNumbers and their sum is less than or equal to numberOfStars</li>
+ *   <li>Wrong: if included in candidateNumbers and their sum is greater than numberOfStars</li>
+ *   <li>Available: otherwise</li>
+ * </ul>
  */
 export const numberStatus = (availableNumbers: number[], candidateNumbers: number[], numberOfStars: number, num: number): NumberStatus => {
 	let status: NumberStatus;

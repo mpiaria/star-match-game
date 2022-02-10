@@ -12,9 +12,9 @@ type StarMatchProps = {
 };
 
 /**
- * The parent component for the entire Star Game.
+ * The component responsible for maintaining the game state.
  *
- * @returns parent JSX.Element
+ * @returns the component representing the entire game
  */
 const StarMatch: React.FC<StarMatchProps> = ({ startNewGame }: StarMatchProps): JSX.Element => {
 	const { availableNumbers, candidateNumbers, numberOfStars, secondsRemaining, setGameState } = useGameState();
