@@ -1,5 +1,5 @@
 import React from "react";
-import { NumberStatus } from "../utils/common";
+import { NumberStatus } from "../types/enums";
 
 type NumberButtonProps = {
 	handleClick: (num: number, currentStatus: NumberStatus) => void;
