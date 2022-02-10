@@ -5,6 +5,12 @@ type StarDisplayProps = {
 	numberOfStars: number;
 };
 
+/**
+ * A JSX.Element used to represent a star on the left side of the game.
+ *
+ * @param props - an instance of StarDisplayProps
+ * @returns the StarDisplay component
+ */
 const StarDisplay: React.FC<StarDisplayProps> = ({ numberOfStars }: StarDisplayProps): JSX.Element => {
 	return (
 		<>

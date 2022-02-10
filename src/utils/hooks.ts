@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { GameStatus, NumberStatus } from "../types/enums";
 import { gameStatus, random, randomSumIn, range, sum } from "./common";
 
-export type GameState = {
+type GameState = {
 	availableNumbers: number[];
 	candidateNumbers: number[];
 	numberOfStars: number;
@@ -10,6 +10,11 @@ export type GameState = {
 	setGameState: (num: number, currentStatus: NumberStatus) => void;
 };
 
+/**
+ * Manages the state of the game.
+ *
+ * @returns an instance of GameState
+ */
 export const useGameState = (): GameState => {
 	/** State variable representing the numbers available to be chosen */
 	const [availableNumbers, setAvailableNumbers] = useState(range(1, 9));
@@ -36,10 +41,9 @@ export const useGameState = (): GameState => {
 	}, [availableNumbers, secondsRemaining]);
 
 	/**
-	 * A function to be passed to the NumberButton component for its onClick property.  When a NumberButton is clicked, the NumberStatus changes.
-	 * This function handles the state variables for situations such as the correct answer is reached or the NumberButton is not part of the solution.
+	 * This function handles the state variables for situations such as the correct answer is reached, num is possibly part of the solution, or num is not part of the solution.
 	 *
-	 * @param num - the number value of the NumberButton being clicked
+	 * @param num - the number to be evaluated
 	 * @param currentStatus - the status of that number
 	 */
 	const setGameState = (num: number, currentStatus: NumberStatus): void => {
